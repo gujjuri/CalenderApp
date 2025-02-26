@@ -1,22 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Gujjuri Calender App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Google Sheets Web App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <iframe src="https://script.google.com/macros/s/AKfycbxS1nw8pnU2QjfWkiHv8o0M8vklyb6j1T1kiOkQsaG-091c-Xl_QKnHorkhBo7nHyvagQ/exec"
-        width="100%"
-        height="100%"
-        allowfullscreen="true"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
-    </iframe>
+    <h1>Welcome to My Google Sheets Web App</h1>
+    <p>Click the button below to interact with the app.</p>
+    <button onclick="runApp()">Run the App</button>
+    <div id="response"></div>
 
     <script>
-        window.onload = function () {
-            document.querySelector('iframe').requestFullscreen().catch((err) => {
-                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-            });
-        };
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxmzTGUGxkmeww7C7fN4NH1tQIdqsenanFh-TSjB-wgSfbjMJJSiFQp3JxyHYfM3WKXvw/exec";
+
+        async function runApp() {
+            try {
+                // Example: Sending a GET request to the GAS endpoint
+                const response = await fetch(GAS_URL, {
+                    method: "GET", // Change to "POST" if your app expects POST requests
+                    mode: "cors"   // Ensure CORS is enabled in GAS if needed
+                });
+
+                if (!response.ok) throw new Error("Network response was not ok");
+
+                const data = await response.text(); // Use .json() if your GAS returns JSON
+                const responseDiv = document.getElementById("response");
+                responseDiv.style.display = "block";
+                responseDiv.innerHTML = data; // Display the response from GAS
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("response").innerHTML = "An error occurred: " + error.message;
+                document.getElementById("response").style.display = "block";
+            }
+        }
     </script>
 </body>
 </html>
